@@ -80,7 +80,7 @@ public class PublishUpdateSite {
 					+ "java org.eclipse.ajdt.scripts/src/org/eclipse/ajdt/scripts/PublishUpdateSite.java [--dry-run] <user>@projects-storage.eclipse.org nightly <target_prefix>\n"
 					+ "java org.eclipse.ajdt.scripts/src/org/eclipse/ajdt/scripts/PublishUpdateSite.java [--dry-run] <user>@projects-storage.eclipse.org release <target_prefix>\n"
 					+ "<target_prefix> - rcptt/dependencies/ajdt or ajdt. \n"
-					+ "Example output directory: genie.rcptt@projects-storage.eclipse.org:" + TARGET_DIRECTORY_PARENT_TEMPLATE.formatted("rcptt/dependencies/ajdt", Mode.RELEASE.name().toLowerCase(), "2.2.4"));
+					+ "Example output directory: genie.rcptt@projects-storage.eclipse.org:" + TARGET_DIRECTORY_PARENT_TEMPLATE.formatted("rcptt/dependencies/ajdt", Mode.RELEASE.name().toLowerCase()) + "/2.2.4");
 			System.exit(1);
 		}
 		String connection = arguments.remove(0);
