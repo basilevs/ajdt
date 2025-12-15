@@ -12,7 +12,7 @@ pipeline {
       steps {
         sh 'mvn -Pe431 -Peclipse-sign -DskipTests clean verify'
         sshagent(['projects-storage.eclipse.org-bot-ssh']) {
-          sh 'java org.eclipse.ajdt.scripts/src/org/eclipse/ajdt/scripts/PublishUpdateSite.java genie.rcptt@projects-storage.eclipse.org nightly rcptt/dependencies/ajdt'
+          sh 'java org.eclipse.ajdt.scripts/src/org/eclipse/ajdt/scripts/PublishUpdateSite.java genie.rcptt@projects-storage.eclipse.org nightly /home/data/httpd/download.eclipse.org/rcptt/dependencies/ajdt'
         }
       }
     }
