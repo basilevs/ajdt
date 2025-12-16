@@ -33,7 +33,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 /**
  * Exports org.eclipse.ajdt.releng/target/repositoryorg.eclipse.ajdt.releng/target/repository to download.eclipse.org
@@ -166,14 +165,14 @@ public class PublishUpdateSite {
 			Document document = builder.parse(pomPath.toFile());
 			XPath xpath = XPathFactory.newInstance().newXPath();
 	
-			Node versionNode = (Node) xpath.evaluate("/project/version", document, XPathConstants.NODE);
-			if (versionNode != null && !versionNode.getTextContent().isBlank()) {
-				return versionNode.getTextContent().trim();
+			String version = (String) xpath.evaluate("/project/version/text()", document, XPathConstants.STRING);
+			if (version != null && !version.isBlank()) {
+				return version;
 			}
 	
-			Node parentVersionNode = (Node) xpath.evaluate("/project/parent/version", document, XPathConstants.NODE);
-			if (parentVersionNode != null && !parentVersionNode.getTextContent().isBlank()) {
-				return parentVersionNode.getTextContent().trim();
+			version = (String) xpath.evaluate("/project/parent/version/text()", document, XPathConstants.STRING);
+			if (version != null && !version.isBlank()) {
+				return version;
 			}
 	
 			throw new IllegalStateException("No <version> found in " + pomPath.toAbsolutePath());
