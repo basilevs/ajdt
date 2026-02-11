@@ -136,6 +136,18 @@ public class AJCompilationUnitStructureRequestor extends
         setJDTParser(otherParser);
     }
 
+    @Override
+    public void enterBlock(int sourceEnd) {
+        // do nothing, this method is needed to resolve a default method conflict
+        // between org.eclipse.jdt.internal.compiler.ISourceElementRequestor and org.aspectj.org.eclipse.jdt.internal.compiler.ISourceElementRequestor
+    }
+
+    @Override
+    public void exitBlock(int sourceEnd) {
+        // do nothing, this method is needed to resolve a default method conflict
+        // between org.eclipse.jdt.internal.compiler.ISourceElementRequestor and org.aspectj.org.eclipse.jdt.internal.compiler.ISourceElementRequestor
+    }
+
     private void setJDTParser(org.eclipse.jdt.internal.compiler.parser.Parser parser) {
         this.parser = parser;
     }
@@ -287,11 +299,6 @@ public class AJCompilationUnitStructureRequestor extends
                     mi.isAnnotation,
                     mi.typeParameters,
                     mdecl);
-    }
-
-    @Override
-    public void exitCompactConstructor(int declarationEnd) {
-        super.exitCompactConstructor(declarationEnd);
     }
 
     /* default */ static String[] convertTypeNamesToSigsCopy(char[][] typeNames) {

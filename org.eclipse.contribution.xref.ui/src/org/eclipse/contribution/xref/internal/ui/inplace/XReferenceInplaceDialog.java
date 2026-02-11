@@ -495,8 +495,6 @@ public class XReferenceInplaceDialog {
 
 		viewMenuButton.setImage(JavaPluginImages
 				.get(JavaPluginImages.IMG_ELCL_VIEW_MENU));
-		viewMenuButton.setDisabledImage(JavaPluginImages
-				.get(JavaPluginImages.IMG_DLCL_VIEW_MENU));
 		viewMenuButton.setToolTipText(XRefMessages.XReferenceInplaceDialog_viewMenu_toolTipText);
 
 		//Used to enable the menu to be accessed from the keyboard

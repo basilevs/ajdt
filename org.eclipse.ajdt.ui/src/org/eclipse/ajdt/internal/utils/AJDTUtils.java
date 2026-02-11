@@ -14,6 +14,8 @@
  **********************************************************************/
 package org.eclipse.ajdt.internal.utils;
 
+import static org.eclipse.ajdt.internal.utils.PdeInternals.isPluginProject;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -72,7 +74,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModel;
-import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.pde.internal.ui.IPDEUIConstants;
 import org.eclipse.pde.internal.ui.editor.plugin.DependenciesPage;
 import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor;
@@ -190,7 +191,7 @@ public class AJDTUtils {
         // Bugzilla 62625
         // Bugzilla 93532 - just add plugin dependency if there is a plugin.xml file
         // Bugzilla 137922 - also consider bundles without a plugin.xml
-        if (project.hasNature(PDE.PLUGIN_NATURE)
+        if (isPluginProject(project)
                 && (hasPluginManifest(project)
                         || hasBundleManifest(project))) {
             // Dealing with a plugin project. In that case the
@@ -643,7 +644,7 @@ public class AJDTUtils {
         // Bugzilla 62625
         // Bugzilla 93532 - just remove plugin dependency if there is a plugin.xml file
         // Bugzilla 137922 - also consider bundles without a plugin.xml
-        if (project.hasNature(PDE.PLUGIN_NATURE)
+        if (isPluginProject(project)
                 && (hasPluginManifest(project)
                         || hasBundleManifest(project))) {
             // Bugzilla 72007

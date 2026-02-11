@@ -38,7 +38,6 @@ public class ConfigureAJBuildPathAction extends Action implements
 				NewWizardMessages.NewSourceContainerWorkbookPage_ToolBar_ConfigureBP_label,
 				JavaPluginImages.DESC_ELCL_CONFIGURE_BUILDPATH);
 		setToolTipText(NewWizardMessages.NewSourceContainerWorkbookPage_ToolBar_ConfigureBP_tooltip);
-		setDisabledImageDescriptor(JavaPluginImages.DESC_DLCL_CONFIGURE_BUILDPATH);
 	}
 
 	private Shell getShell() {

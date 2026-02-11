@@ -302,6 +302,21 @@
 		</profile>
 
 		<profile>
+			<id>e439</id>
+			<properties>
+				<platform.version>e439</platform.version>
+				<weaving.hook.version>1.4.400.v20250628-0635</weaving.hook.version>
+			</properties>
+			<repositories>
+				<repository>
+					<id>2026-03-releases</id>
+					<layout>p2</layout>
+					<url>https://download.eclipse.org/releases/2026-03/</url>
+				</repository>
+			</repositories>
+		</profile>
+
+		<profile>
 			<!--
 				This profile enables an IDE like IntelliJ IDEA to resolve classes from aspectjrt, aspectjweaver, aspectjtools
 				directly, because the corresponding Maven modules creating OSGi components (org.aspectj.runtime,
