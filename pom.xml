@@ -363,7 +363,6 @@
 						<artifactId>target-platform-configuration</artifactId>
 						<configuration>
 							<includePackedArtifacts>true</includePackedArtifacts>
-							<executionEnvironment>JavaSE-17</executionEnvironment>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -407,7 +406,6 @@
 						<artifactId>target-platform-configuration</artifactId>
 						<configuration>
 							<includePackedArtifacts>true</includePackedArtifacts>
-							<executionEnvironment>JavaSE-17</executionEnvironment>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -551,7 +549,7 @@
 							<arch>x86_64</arch>
 						</environment>
 					</environments>
-					<executionEnvironment>JavaSE-17</executionEnvironment>
+					<executionEnvironment>JavaSE-21</executionEnvironment>
 				</configuration>
 			</plugin>
 
