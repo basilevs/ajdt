@@ -341,11 +341,12 @@ protected void consumeClassInstanceCreationExpressionWithTypeArguments() {
 			alloc.sourceStart);
 	}
 }
-protected void consumeConstructorHeaderName() {
+@Override
+protected void consumeConstructorHeaderName(boolean isCompact) {
 	long selectorSourcePositions = this.identifierPositionStack[this.identifierPtr];
 	int selectorSourceEnd = (int) selectorSourcePositions;
 	int currentAstPtr = this.astPtr;
-	super.consumeConstructorHeaderName();
+	super.consumeConstructorHeaderName(isCompact);
 	if (this.astPtr > currentAstPtr) { // if ast node was pushed on the ast stack
 		this.sourceEnds.put(this.astStack[this.astPtr], selectorSourceEnd);
 		rememberCategories();
@@ -423,8 +424,9 @@ protected void consumeFieldAccess(boolean isSuperAccess) {
 		requestor.acceptFieldReference(fr.token, fr.sourceStart);
 	}
 }
-protected void consumeFormalParameter(boolean isVarArgs) {
-	super.consumeFormalParameter(isVarArgs);
+@Override
+protected void consumeSingleVariableDeclarator(boolean isVarArgs) {
+	super.consumeSingleVariableDeclarator(isVarArgs);
 
 	// Flush comments prior to this formal parameter so the declarationSourceStart of the following parameter
 	// is correctly set (see bug 80904)
@@ -605,13 +607,6 @@ protected void consumeSingleStaticImportDeclarationName() {
 	//this.endPosition is just before the ;
 	impt.declarationSourceStart = this.intStack[this.intPtr--];
 
-	if(!this.statementRecoveryActivated &&
-			this.options.sourceLevel < ClassFileConstants.JDK1_5 &&
-			this.lastErrorEndPositionBeforeRecovery < this.scanner.currentPosition) {
-		impt.modifiers = ClassFileConstants.AccDefault; // convert the static import reference to a non-static importe reference
-		this.problemReporter().invalidUsageOfStaticImports(impt);
-	}
-
 	// recovery
 	if (this.currentElement != null){
 		this.lastCheckPoint = impt.declarationSourceEnd+1;
@@ -700,12 +695,6 @@ protected void consumeStaticImportOnDemandDeclarationName() {
 	//this.endPosition is just before the ;
 	impt.declarationSourceStart = this.intStack[this.intPtr--];
 
-	if(!this.statementRecoveryActivated &&
-			options.sourceLevel < ClassFileConstants.JDK1_5 &&
-			this.lastErrorEndPositionBeforeRecovery < this.scanner.currentPosition) {
-		impt.modifiers = ClassFileConstants.AccDefault; // convert the static import reference to a non-static importe reference
-		this.problemReporter().invalidUsageOfStaticImports(impt);
-	}
 
 	// recovery
 	if (this.currentElement != null){
@@ -771,7 +760,8 @@ protected CompilationUnitDeclaration endParse(int act) {
 		return null;
 	}
 }
-public TypeReference getTypeReference(int dim) {
+@Override
+public TypeReference constructTypeReference(int dim) {
 	/* build a Reference on a variable that may be qualified or not
 	 * This variable is a type reference and dim will be its dimensions
 	 */

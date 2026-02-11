@@ -97,7 +97,7 @@ public class AJOrganizeImportsOperation implements IWorkspaceRunnable {
 
 			public UnresolvedTypeData(SimpleName ref) {
 				this.ref= ref;
-				this.typeKinds= ASTResolving.getPossibleTypeKinds(ref, true);
+				this.typeKinds= ASTResolving.getPossibleTypeKinds(ref);
 				this.foundInfos= new ArrayList<>(3);
 			}
 
