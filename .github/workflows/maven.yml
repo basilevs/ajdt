@@ -30,7 +30,7 @@ jobs:
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
         # Tycho only supports LTS, other Java releases only short-term.
         # Tycho 3 no longer supports building on JDK 11, because it contains Java 17 class files.
-        java: [ 17 ]
+        java: [ 21 ]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -75,7 +75,7 @@ jobs:
       # Always run build without tests first
 
       - name: Build + package (no tests)
-        run: ./mvnw --batch-mode -Pe431 -DskipTests clean verify
+        run: ./mvnw --batch-mode -Pe439 -DskipTests clean verify
 
       # Then optionally run tests in one of 3 user-selected modes
       # TODO: find a way to avoid duplication
@@ -85,28 +85,28 @@ jobs:
         # UI tests need frame buffer on Linux
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: ./mvnw --batch-mode -Pe431 verify
+          run: ./mvnw --batch-mode -Pe439 verify
 
       - name: Run more tests, fail at end
         if: ${{ github.event.inputs.testMode == 'run more tests, fail at end' }}
         # UI tests need frame buffer on Linux
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: ./mvnw --batch-mode -Pe431 --fail-at-end verify
+          run: ./mvnw --batch-mode -Pe439 --fail-at-end verify
 
       - name: Run all tests, ignore failures
         if: ${{ github.event.inputs.testMode == 'run all tests, ignore failures' }}
         # UI tests need frame buffer on Linux
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: ./mvnw --batch-mode -Pe431 -Dmaven.test.failure.ignore=true verify
+          run: ./mvnw --batch-mode -Pe439 -Dmaven.test.failure.ignore=true verify
 
       # No matter if a preceding test run failed or not, try to generate and upload a test report
       # TODO: these steps should only happen if at least the build without tests passed, not always
 
       - name: Generate aggregate test report
         if: always()
-        run: ./mvnw --batch-mode -Pe431 -Daggregate=true surefire-report:report-only
+        run: ./mvnw --batch-mode -Pe439 -Daggregate=true surefire-report:report-only
 
       - name: Attach aggregate test report to build
         if: always()

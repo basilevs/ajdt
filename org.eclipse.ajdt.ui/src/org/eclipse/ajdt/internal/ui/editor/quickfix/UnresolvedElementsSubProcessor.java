@@ -66,6 +66,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.core.manipulation.CUCorrectionProposalCore;
 import org.eclipse.jdt.core.manipulation.TypeKinds;
 //import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
 import org.eclipse.jdt.internal.core.manipulation.StubUtility;
@@ -86,7 +87,7 @@ import org.eclipse.jdt.internal.ui.text.correction.SimilarElement;
 import org.eclipse.jdt.internal.ui.text.correction.SimilarElementsRequestor;
 import org.eclipse.jdt.internal.ui.text.correction.TypeMismatchSubProcessor;
 import org.eclipse.jdt.internal.ui.text.correction.proposals.AddArgumentCorrectionProposal;
-import org.eclipse.jdt.internal.ui.text.correction.proposals.AddImportCorrectionProposal;
+import org.eclipse.jdt.internal.ui.text.correction.proposals.AddImportCorrectionProposalCore;
 import org.eclipse.jdt.internal.ui.text.correction.proposals.AddTypeParameterProposal;
 import org.eclipse.jdt.internal.ui.text.correction.proposals.CastCorrectionProposal;
 import org.eclipse.jdt.internal.ui.text.correction.proposals.ChangeMethodSignatureProposal;
@@ -109,6 +110,7 @@ import org.eclipse.jdt.ui.JavaElementLabels;
 import org.eclipse.jdt.ui.text.java.IInvocationContext;
 import org.eclipse.jdt.ui.text.java.IProblemLocation;
 import org.eclipse.jdt.ui.text.java.correction.ASTRewriteCorrectionProposal;
+import org.eclipse.jdt.ui.text.java.correction.ASTRewriteCorrectionProposalCore;
 import org.eclipse.jdt.ui.text.java.correction.CUCorrectionProposal;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
@@ -521,7 +523,7 @@ public class UnresolvedElementsSubProcessor {
 	}
 
 	private static int evauateTypeKind(ASTNode node, IJavaProject project) {
-    return ASTResolving.getPossibleTypeKinds(node, true);
+    return ASTResolving.getPossibleTypeKinds(node);
 	}
 
 
@@ -589,9 +591,9 @@ public class UnresolvedElementsSubProcessor {
 			simpleBinding= simpleBinding.getTypeDeclaration();
 
 			resolvedTypeName= simpleBinding.getQualifiedName();
-			CUCorrectionProposal proposal= createTypeRefChangeProposal(cu, resolvedTypeName, node, relevance + 2, elements.length);
+			CUCorrectionProposalCore proposal= createTypeRefChangeProposal(cu, resolvedTypeName, node, relevance + 2, elements.length);
 			proposals.add(proposal);
-			if (proposal instanceof AddImportCorrectionProposal)
+			if (proposal instanceof AddImportCorrectionProposalCore)
 				proposal.setRelevance(relevance + elements.length + 2);
 
 			if (binding.isParameterizedType() && node.getParent() instanceof SimpleType && !(node.getParent().getParent() instanceof Type)) {
@@ -618,7 +620,7 @@ public class UnresolvedElementsSubProcessor {
     }
 	}
 
-	private static CUCorrectionProposal createTypeRefChangeProposal(ICompilationUnit cu, String fullName, Name node, int relevance, int maxProposals) throws CoreException {
+	private static CUCorrectionProposalCore createTypeRefChangeProposal(ICompilationUnit cu, String fullName, Name node, int relevance, int maxProposals) throws CoreException {
 		ImportRewrite importRewrite= null;
 		String simpleName= fullName;
 		String packName= Signature.getQualifier(fullName);
@@ -631,14 +633,13 @@ public class UnresolvedElementsSubProcessor {
 			relevance -= 2;
 		}
 
-		ASTRewriteCorrectionProposal proposal;
+		ASTRewriteCorrectionProposalCore proposal;
 		if (importRewrite != null && node.isSimpleName() && simpleName.equals(((SimpleName) node).getIdentifier())) { // import only
 			// import only
 			String[] arg= { simpleName, packName };
 			String label= Messages.format(CorrectionMessages.UnresolvedElementsSubProcessor_importtype_description, arg);
-			Image image= JavaPluginImages.get(JavaPluginImages.IMG_OBJS_IMPDECL);
 			int boost= QualifiedTypeNameHistory.getBoost(fullName, 0, maxProposals);
-			proposal= new AddImportCorrectionProposal(label, cu, relevance + 100 + boost, image, packName, simpleName, (SimpleName)node);
+			proposal= new AddImportCorrectionProposalCore(label, cu, relevance + 100 + boost, packName, simpleName, (SimpleName)node);
 			proposal.setCommandId(ADD_IMPORT_ID);
 		} else {
 			String label;
@@ -650,8 +651,7 @@ public class UnresolvedElementsSubProcessor {
 			}
 			ASTRewrite rewrite= ASTRewrite.create(node.getAST());
 			rewrite.replace(node, rewrite.createStringPlaceholder(simpleName, ASTNode.SIMPLE_TYPE), null);
-			Image image= JavaPluginImages.get(JavaPluginImages.IMG_CORRECTION_CHANGE);
-			proposal= new ASTRewriteCorrectionProposal(label, cu, rewrite, relevance, image);
+			proposal= new ASTRewriteCorrectionProposalCore(label, cu, rewrite, relevance);
 		}
 		if (importRewrite != null) {
 			proposal.setImportRewrite(importRewrite);
